@@ -10,12 +10,16 @@
     "default_title": "361"
   },
   "permissions": [
+    "alarms",
     "tabs",
     "activeTab",
     "<all_urls>"
   ],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": [
+      "LinkedList.js",
+      "background.js"
+    ],
     "persistent": false
   }
 }
