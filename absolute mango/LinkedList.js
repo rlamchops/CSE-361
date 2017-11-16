@@ -4,7 +4,16 @@ function LinkedList(){
 
 //compare before and after images
 function compareImages(before, after){
-
+    resemble(before).compareTo(after).onComplete(function(data){
+        return data;
+        /*
+        {
+          misMatchPercentage : 100, // %
+          isSameDimensions: true, // or false
+          getImageDataUrl: function(){}
+        }
+        */
+    });
 }
 
 LinkedList.prototype.add = function(img, url){

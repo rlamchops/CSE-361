@@ -17,6 +17,8 @@
   ],
   "background": {
     "scripts": [
+      "resemblejs/resemble.js",
+      // "resemblejs/compareImages.js",
       "LinkedList.js",
       "background.js"
     ],
