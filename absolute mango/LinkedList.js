@@ -14,6 +14,47 @@ function compareImages(before, after){
         }
         */
     });
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext("2d");
+    var parts = [];
+    var parts2 = [];
+    //the total # of pieces to split into is pieces^2
+    var pieces = 2;
+
+    var image = document.createElement("img");
+    image.onload = function() {
+      var w = image.width / pieces;
+      var h = image.height / pieces;
+      canvas.width = w;
+      canvas.height = h;
+      for (var i = 0; i < pieces * pieces; i++) {
+        var x = (-w * i) % (w * pieces);
+        var y = (h * i ) <= h ? 0 : -h;
+        ctx.drawImage(this, x, y, w * pieces, h * pieces);
+        parts.push(canvas.toDataURL());
+      }
+      console.log(parts);
+      console.log("hi1");
+    };
+    // image.onload = split(2, parts);
+    image.src = before;
+
+    var image2 = document.createElement("img");
+    image2.onload = function() {
+      var w = image2.width / pieces;
+      var h = image2.height / pieces;
+      canvas.width = w;
+      canvas.height = h;
+      for (var i = 0; i < pieces * pieces; i++) {
+        var x = (-w * i) % (w * pieces);
+        var y = (h * i ) <= h ? 0 : -h;
+        ctx.drawImage(this, x, y, w * pieces, h * pieces);
+        parts2.push(canvas.toDataURL());
+      }
+      console.log(parts2);
+      console.log("hi2");
+    };
+    image2.src = after;
 }
 
 LinkedList.prototype.add = function(img, url){
