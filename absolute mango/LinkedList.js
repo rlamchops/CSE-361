@@ -17,7 +17,7 @@ function compareImages(before, after){
         
         chrome.tabs.executeScript(null, {
             code: "var iframe = document.createElement(\"iframe\"); iframe.src = \"" + comparison + "\"; iframe.allowtransparency = true; iframe.frameborder = \"0\"; " + 
-            " iframe.scrolling=\"no\"; iframe.style.position = \"absolute\"; iframe.style.opacity = \"0.5\"; "
+            " iframe.scrolling=\"no\"; iframe.style.position = \"fixed\"; iframe.style.opacity = \"0.5\"; iframe.style.margin = \"0 auto\"; "
             + "iframe.position = \"absolute\"; iframe.width = \"100%\";  iframe.height = \"100%\"; iframe.style.zIndex = \"1\"; document.body.appendChild(iframe);"
             // code: "var i = document.createElement(\"img\"); i.src = \"" + comparison + "\"; i.zIndex = \"9000\"; document.body.appendChild(i);"
         })
@@ -34,6 +34,9 @@ function compareImages(before, after){
 }
 
 LinkedList.prototype.add = function(img, url){
+    if(typeof img == "undefined"){
+        return;
+    }
     var node = {
         image: img,
         url: url,
