@@ -15,12 +15,14 @@ function compareImages(before, after){
         console.log("hi");
         var comparison = data.getImageDataUrl();
 
-        chrome.tabs.executeScript(null, {
-            code: "alert(" + data.misMatchPercentage + " + \"% of the page was mismatched/different.\"); "
-        })
-
         if(data.misMatchPercentage == 0){
             return;
+        }
+
+        else {
+          chrome.tabs.executeScript(null, {
+              code: "alert(" + data.misMatchPercentage + " + \"% of the page was mismatched/different.\"); "
+          })
         }
 
         chrome.tabs.executeScript(null, {
@@ -29,7 +31,8 @@ function compareImages(before, after){
             " iframe.scrolling=\"no\"; iframe.style.position = \"absolute\"; iframe.style.opacity = \"0.5\"; iframe.style.margin = \"0 auto\"; "
             + " iframe.style.pointerEvents = \"none\"; iframe.setAttribute(\"id\", \"iframe\"); "
             + "var topOffset = (window.pageYOffset || document.scrollTop) - (document.clientTop || 0);"
-            + "iframe.style.left = \"0px\"; iframe.style.top = topOffset;"
+            + "console.log(topOffset);"
+            + "iframe.style.left = \"0px\"; iframe.style.top = topOffset.toString() + \"px\";"
             + "iframe.position = \"absolute\"; iframe.width = \"100%\";  iframe.height = \"100%\"; iframe.style.zIndex = \"9000\"; document.body.appendChild(iframe);"
         })
 
