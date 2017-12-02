@@ -12,12 +12,19 @@ function compareImages(before, after){
         a.src = comparison;
         var canvas = document.createElement("canvas");
         canvas.setAttribute("id", "canvas");
-        var body = document.querySelector("body");
-        body.appendChild(canvas);
         context = canvas.getContext('2d');
         a.onload = function(){
             context.drawImage(a, 0, 0);
-        }        
+        }
+
+        chrome.tabs.executeScript(null,
+        {
+            code: "alert(\"poop\");"
+        })
+        
+        chrome.tabs.executeScript(null, {
+            code: "var iframe = document.createElement(\"iframe\"); iframe.src = \"" + comparison + "\"; iframe.width = \"100%\";  iframe.height = \"100%\"; iframe.zIndex = \"9000\"; document.body.appendChild(iframe);"
+        })
 
         return data;
         /*

@@ -26,6 +26,9 @@ chrome.tabs.onActivated.addListener(function() {
   captureImage();
 });
 
-//When the extension icon is clicked
+//When the icon is clicked
 chrome.browserAction.onClicked.addListener((tab) => {
+  chrome.tabs.executeScript(tab.id, {
+    code: "alert(\"poop\");"
+  });
 });
