@@ -43,6 +43,44 @@ function compareImages(before, after){
     });
 }
 
+LinkedList.prototype.addWithoutCheck = function(img, url){
+    if(typeof img == "undefined"){
+        return;
+    }
+    var node = {
+        image: img,
+        url: url,
+        next: null
+    }
+
+    if(!this.head){
+        this.head = node;
+    } else{
+        current = this.head;
+        while(current.next){
+            //If matching url then compare before and after images
+            if(current.url == url && typeof current.img != "undefined"){
+                // compareImages(current.image, img);
+                return;
+            } else if (current.url == url && typeof current.img == "undefined"){
+                current.img = img;
+                return;
+            }
+            current = current.next;
+        }
+
+        if(current.url == url && typeof current.img != "undefined"){
+            compareImages(current.image, img);
+            current.image = img;
+            return;
+        } else if (current.url == url && typeof current.img == "undefined"){
+            current.img = img;
+            return;
+        }
+        current.next = node;
+    }
+}
+
 LinkedList.prototype.add = function(img, url){
     if(typeof img == "undefined"){
         return;
@@ -72,6 +110,7 @@ LinkedList.prototype.add = function(img, url){
 
         if(current.url == url && typeof current.img != "undefined"){
             compareImages(current.image, img);
+            current.image = img;
             return;
         } else if (current.url == url && typeof current.img == "undefined"){
             current.img = img;

@@ -14,6 +14,19 @@ function captureImageCallback(tabs, img){
   list.add(img, tabs[0].url);
 }
 
+function captureImageWithoutCheck(){
+  chrome.tabs.captureVisibleTab(function(img) {
+    chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
+      captureImageCallbackWithoutCheck(tabs, img);
+    });
+  });
+}
+
+function captureImageCallbackWithoutCheck(tabs, img){
+  console.log(tabs[0].url);
+  list.addWithoutCheck(img, tabs[0].url);
+}
+
 //Using Chrome Alarm API capture an image periodically
 chrome.alarms.create("captureImage", {
   delayInMinutes: 0,
@@ -22,7 +35,7 @@ chrome.alarms.create("captureImage", {
 
 chrome.alarms.onAlarm.addListener(function(alarm) {
   if (alarm.name === "captureImage") {
-      captureImage();
+      captureImageWithoutCheck();
   }
 });
 
