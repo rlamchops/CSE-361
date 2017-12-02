@@ -22,12 +22,14 @@ function compareImages(before, after){
         if(data.misMatchPercentage == 0){
             return;
         }
-        
+
         chrome.tabs.executeScript(null, {
             code: "var i = document.getElementById(\"iframe\"); if(i != null){i.parentNode.removeChild(i);} "
-            + "var iframe = document.createElement(\"iframe\"); iframe.src = \"" + comparison + "\"; iframe.allowtransparency = true; iframe.frameborder = \"0\"; " + 
-            " iframe.scrolling=\"no\"; iframe.style.position = \"fixed\"; iframe.style.opacity = \"0.0\"; iframe.style.margin = \"0 auto\"; "
+            + "var iframe = document.createElement(\"iframe\"); iframe.src = \"" + comparison + "\"; iframe.allowtransparency = true; iframe.frameborder = \"0\"; " +
+            " iframe.scrolling=\"no\"; iframe.style.position = \"absolute\"; iframe.style.opacity = \"0.5\"; iframe.style.margin = \"0 auto\"; "
             + " iframe.style.pointerEvents = \"none\"; iframe.setAttribute(\"id\", \"iframe\"); "
+            + "var topOffset = (window.pageYOffset || document.scrollTop) - (document.clientTop || 0);"
+            + "iframe.style.left = \"0px\"; iframe.style.top = topOffset;"
             + "iframe.position = \"absolute\"; iframe.width = \"100%\";  iframe.height = \"100%\"; iframe.style.zIndex = \"9000\"; document.body.appendChild(iframe);"
         })
 
@@ -69,7 +71,7 @@ LinkedList.prototype.addWithoutCheck = function(img, url){
             compareImages(current.image, img);
             current.image = img;
             return;
-        } 
+        }
         current.next = node;
     }
 }
@@ -95,7 +97,7 @@ LinkedList.prototype.add = function(img, url){
             if(current.url == url){
                 compareImages(current.image, img);
                 return;
-            } 
+            }
             current = current.next;
         }
 
@@ -103,7 +105,7 @@ LinkedList.prototype.add = function(img, url){
             compareImages(current.image, img);
             current.image = img;
             return;
-        } 
+        }
         current.next = node;
     }
 }
