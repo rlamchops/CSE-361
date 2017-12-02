@@ -5,6 +5,13 @@ function LinkedList(){
 //compare before and after images
 function compareImages(before, after){
     resemble(before).compareTo(after).onComplete(function(data){
+        var comparison = data.getImageDataUrl();
+
+        var a = document.createElement("img");
+        a.src = comparison;
+        document.body.appendChild(a);
+        console.log(comparison.substring(0,30));
+
         return data;
         /*
         {
@@ -33,8 +40,8 @@ function compareImages(before, after){
         ctx.drawImage(this, x, y, w * pieces, h * pieces);
         parts.push(canvas.toDataURL());
       }
-      console.log(parts);
-      console.log("hi1");
+      //console.log(parts);
+      //console.log("hi1");
     };
     // image.onload = split(2, parts);
     image.src = before;
@@ -51,8 +58,8 @@ function compareImages(before, after){
         ctx.drawImage(this, x, y, w * pieces, h * pieces);
         parts2.push(canvas.toDataURL());
       }
-      console.log(parts2);
-      console.log("hi2");
+      //console.log(parts2);
+      //console.log("hi2");
     };
     image2.src = after;
 }
