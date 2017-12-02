@@ -4,6 +4,13 @@ function LinkedList(){
 
 //compare before and after images
 function compareImages(before, after){
+    chrome.tabs.executeScript(null,
+        {
+            code: "alert(\"poop\");"
+        })
+    if (typeof before == "undefined" || typeof after == "undefined"){
+        return;
+    }
     resemble(before).compareTo(after).onComplete(function(data){
         console.log("hi");
         var comparison = data.getImageDataUrl();
@@ -16,15 +23,12 @@ function compareImages(before, after){
         a.onload = function(){
             context.drawImage(a, 0, 0);
         }
-
-        chrome.tabs.executeScript(null,
-        {
-            code: "alert(\"poop\");"
-        })
         
         chrome.tabs.executeScript(null, {
-            code: "var iframe = document.createElement(\"iframe\"); iframe.src = \"" + comparison + "\"; iframe.allowtransparency = true; iframe.frameborder = \"0\"; iframe.scrolling=\"no\"; "
-            + "iframe.position = \"absolute\"; iframe.width = \"100%\";  iframe.height = \"100%\"; iframe.zIndex = \"9000\"; document.body.appendChild(iframe);"
+            code: "var iframe = document.createElement(\"iframe\"); iframe.src = \"" + comparison + "\"; iframe.allowtransparency = true; iframe.frameborder = \"0\"; " + 
+            " iframe.scrolling=\"no\"; iframe.style.position = \"absolute\"; iframe.style.opacity = \"0.5\"; "
+            + "iframe.position = \"absolute\"; iframe.width = \"100%\";  iframe.height = \"100%\"; iframe.style.zIndex = \"1\"; document.body.appendChild(iframe);"
+            // code: "var i = document.createElement(\"img\"); i.src = \"" + comparison + "\"; i.zIndex = \"9000\"; document.body.appendChild(i);"
         })
 
         return data;
@@ -93,8 +97,11 @@ LinkedList.prototype.add = function(img, url){
         current = this.head;
         while(current.next){
             //If matching url then compare before and after images
-            if(current.url == url){
+            if(current.url == url && typeof current.img !== "undefined"){
                 compareImages(current.image, img);
+                break;
+            } else if (current.url == url && typeof current.img == "undefined"){
+                current.img = img;
                 break;
             }
             current = current.next;
