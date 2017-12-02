@@ -14,10 +14,20 @@ function compareImages(before, after){
     resemble(before).compareTo(after).onComplete(function(data){
         console.log("hi");
         var comparison = data.getImageDataUrl();
+
+        chrome.tabs.executeScript(null, {
+            code: "alert(" + data.misMatchPercentage + " + \"% of the page was mismatched/different.\"); "
+        })
+
+        if(data.misMatchPercentage == 0){
+            return;
+        }
         
         chrome.tabs.executeScript(null, {
-            code: "var iframe = document.createElement(\"iframe\"); iframe.src = \"" + comparison + "\"; iframe.allowtransparency = true; iframe.frameborder = \"0\"; " + 
+            code: "var i = document.getElementById(\"iframe\"); if(i != null){i.parentNode.removeChild(i);} "
+            + "var iframe = document.createElement(\"iframe\"); iframe.src = \"" + comparison + "\"; iframe.allowtransparency = true; iframe.frameborder = \"0\"; " + 
             " iframe.scrolling=\"no\"; iframe.style.position = \"fixed\"; iframe.style.opacity = \"0.5\"; iframe.style.margin = \"0 auto\"; "
+            + " iframe.style.pointerEvents = \"none\"; iframe.setAttribute(\"id\", \"iframe\"); "
             + "iframe.position = \"absolute\"; iframe.width = \"100%\";  iframe.height = \"100%\"; iframe.style.zIndex = \"1\"; document.body.appendChild(iframe);"
             // code: "var i = document.createElement(\"img\"); i.src = \"" + comparison + "\"; i.zIndex = \"9000\"; document.body.appendChild(i);"
         })
@@ -52,12 +62,20 @@ LinkedList.prototype.add = function(img, url){
             //If matching url then compare before and after images
             if(current.url == url && typeof current.img != "undefined"){
                 compareImages(current.image, img);
-                break;
+                return;
             } else if (current.url == url && typeof current.img == "undefined"){
                 current.img = img;
-                break;
+                return;
             }
             current = current.next;
+        }
+
+        if(current.url == url && typeof current.img != "undefined"){
+            compareImages(current.image, img);
+            return;
+        } else if (current.url == url && typeof current.img == "undefined"){
+            current.img = img;
+            return;
         }
         current.next = node;
     }
