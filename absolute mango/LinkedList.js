@@ -10,17 +10,14 @@ function compareImages(before, after){
 
         var a = document.createElement("img");
         a.src = comparison;
-        let url    = decodeURIComponent(window.location.search.replace('?url=', ''))
-        let iframe = document.createElement('iframe')
-        iframe.src = url
-        
-        iframe.id = 'github-chat-box-iframe-inner'
-        iframe.style.width = '100%'
-        iframe.style.height = '100%'
-        iframe.style.border = '0px';
-        // iframe.body.appendChild(a);
-        // console.log(comparison.substring(0,30));
-        document.body.appendChild(iframe);
+        var canvas = document.createElement("canvas");
+        canvas.setAttribute("id", "canvas");
+        var body = document.querySelector("body");
+        body.appendChild(canvas);
+        context = canvas.getContext('2d');
+        a.onload = function(){
+            context.drawImage(a, 0, 0);
+        }        
 
         return data;
         /*

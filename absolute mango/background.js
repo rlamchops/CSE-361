@@ -25,3 +25,7 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
 chrome.tabs.onActivated.addListener(function() {
   captureImage();
 });
+
+//When the extension icon is clicked
+chrome.browserAction.onClicked.addListener((tab) => {
+});
