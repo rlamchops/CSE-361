@@ -23,7 +23,8 @@ function compareImages(before, after){
         })
         
         chrome.tabs.executeScript(null, {
-            code: "var iframe = document.createElement(\"iframe\"); iframe.src = \"" + comparison + "\"; iframe.width = \"100%\";  iframe.height = \"100%\"; iframe.zIndex = \"9000\"; document.body.appendChild(iframe);"
+            code: "var iframe = document.createElement(\"iframe\"); iframe.src = \"" + comparison + "\"; iframe.allowtransparency = true; iframe.frameborder = \"0\"; iframe.scrolling=\"no\"; "
+            + "iframe.position = \"absolute\"; iframe.width = \"100%\";  iframe.height = \"100%\"; iframe.zIndex = \"9000\"; document.body.appendChild(iframe);"
         })
 
         return data;

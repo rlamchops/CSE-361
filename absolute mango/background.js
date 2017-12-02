@@ -4,10 +4,14 @@ let list = new LinkedList();
 function captureImage(){
   chrome.tabs.captureVisibleTab(function(img) {
     chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
-      console.log(tabs[0].url);
-      list.add(img, tabs[0].url);
+      captureImageCallback(tabs, img);
     });
   });
+}
+
+function captureImageCallback(tabs, img){
+  console.log(tabs[0].url);
+  list.add(img, tabs[0].url);
 }
 
 //Using Chrome Alarm API capture an image periodically
