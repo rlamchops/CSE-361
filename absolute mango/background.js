@@ -1,5 +1,8 @@
 
 let list = new LinkedList();
+var lastTab = {
+  tabID: -1
+}
 
 function captureImage(){
   chrome.tabs.captureVisibleTab(function(img) {
@@ -28,24 +31,25 @@ function captureImageCallbackWithoutCheck(tabs, img){
 }
 
 //Using Chrome Alarm API capture an image periodically
-chrome.alarms.create("captureImage", {
+chrome.alarms.create("captureImageWithoutCheck", {
   delayInMinutes: 0,
-  periodInMinutes: 5
+  periodInMinutes: 1
 });
 
 chrome.alarms.onAlarm.addListener(function(alarm) {
-  if (alarm.name === "captureImage") {
+  if (alarm.name === "captureImageWithoutCheck") {
       captureImageWithoutCheck();
   }
 });
 
-chrome.tabs.onActivated.addListener(function() {
+chrome.tabs.onActivated.addListener(function(tabInfo) {
+  chrome.tabs.executeScript(null, {
+      code: "var i = document.getElementById(\"iframe\"); if(i != null){i.parentNode.removeChild(i);} "
+  })
+
   captureImage();
 });
 
 //When the icon is clicked
 chrome.browserAction.onClicked.addListener((tab) => {
-  chrome.tabs.executeScript(tab.id, {
-    code: "alert(\"poop\");"
-  });
 });

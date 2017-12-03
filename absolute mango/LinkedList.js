@@ -4,15 +4,8 @@ function LinkedList(){
 
 //compare before and after images
 function compareImages(before, after){
-    chrome.tabs.executeScript(null,
-        {
-            code: "alert(\"poop\");"
-        })
-    if (typeof before == "undefined" || typeof after == "undefined"){
-        return;
-    }
     resemble(before).compareTo(after).onComplete(function(data){
-        console.log("hi");
+        console.log("Callback of resemble's compareTo");
         var comparison = data.getImageDataUrl();
 
         if(data.misMatchPercentage == 0){
@@ -26,14 +19,16 @@ function compareImages(before, after){
         }
 
         chrome.tabs.executeScript(null, {
-            code: "var i = document.getElementById(\"iframe\"); if(i != null){i.parentNode.removeChild(i);} "
-            + "var iframe = document.createElement(\"iframe\"); iframe.src = \"" + comparison + "\"; iframe.allowtransparency = true; iframe.frameborder = \"0\"; " +
+            code: "var iframe = document.createElement(\"iframe\"); iframe.src = \"" + comparison + "\"; iframe.allowtransparency = true; iframe.frameborder = \"0\"; " + 
             " iframe.scrolling=\"no\"; iframe.style.position = \"absolute\"; iframe.style.opacity = \"0.5\"; iframe.style.margin = \"0 auto\"; "
             + " iframe.style.pointerEvents = \"none\"; iframe.setAttribute(\"id\", \"iframe\"); "
             + "var topOffset = (window.pageYOffset || document.scrollTop) - (document.clientTop || 0);"
             + "console.log(topOffset);"
             + "iframe.style.left = \"0px\"; iframe.style.top = topOffset.toString() + \"px\";"
             + "iframe.position = \"absolute\"; iframe.width = \"100%\";  iframe.height = \"100%\"; iframe.style.zIndex = \"9000\"; document.body.appendChild(iframe);"
+            // code: "var can = document.createElement(\"canvas\"); can.width = document.documentElement.clientWidth;"
+            //     + " can.height = document.documentElement.clientHeight; can.style.zIndex = \"9000\"; can.position = \"absolute\";" +
+            //     " var ctx = can.getContext(\"2d\"); var img = document.createElement(\"img\"); img.src = \"" + comparison + "\"; document.body.appendChild(can); ctx.drawImage(img,0,0);"
         })
 
         return data;
@@ -65,13 +60,14 @@ LinkedList.prototype.addWithoutCheck = function(img, url){
             //If matching url then compare before and after images
             if(current.url == url){
                 // compareImages(current.image, img);
+                current.image = img;
                 return;
             }
             current = current.next;
         }
 
         if(current.url == url){
-            compareImages(current.image, img);
+            // compareImages(current.image, img);
             current.image = img;
             return;
         }
@@ -99,6 +95,7 @@ LinkedList.prototype.add = function(img, url){
             //If matching url then compare before and after images
             if(current.url == url){
                 compareImages(current.image, img);
+                current.image = img;
                 return;
             }
             current = current.next;

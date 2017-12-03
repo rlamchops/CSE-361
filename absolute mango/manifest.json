@@ -13,6 +13,9 @@
     "alarms",
     "tabs",
     "activeTab",
+    "notifications",
+    "http://*/",
+    "https://*/",
     "<all_urls>"
   ],
   "background": {
