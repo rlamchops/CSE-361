@@ -8,7 +8,7 @@ function compareImages(before, after){
         console.log("Callback of resemble's compareTo");
         var comparison = data.getImageDataUrl();
 
-        if(data.misMatchPercentage == 0){
+        if(data.misMatchPercentage <= 20){
             return;
         }
 
@@ -25,10 +25,7 @@ function compareImages(before, after){
             + "var topOffset = (window.pageYOffset || document.scrollTop) - (document.clientTop || 0);"
             + "console.log(topOffset);"
             + "iframe.style.left = \"0px\"; iframe.style.top = topOffset.toString() + \"px\";"
-            + "iframe.position = \"absolute\"; iframe.width = \"100%\";  iframe.height = \"100%\"; iframe.style.zIndex = \"9000\"; document.body.appendChild(iframe);"
-            // code: "var can = document.createElement(\"canvas\"); can.width = document.documentElement.clientWidth;"
-            //     + " can.height = document.documentElement.clientHeight; can.style.zIndex = \"9000\"; can.position = \"absolute\";" +
-            //     " var ctx = can.getContext(\"2d\"); var img = document.createElement(\"img\"); img.src = \"" + comparison + "\"; document.body.appendChild(can); ctx.drawImage(img,0,0);"
+            + "iframe.position = \"absolute\"; iframe.width = \"100%\";  iframe.height = \"100%\"; iframe.style.zIndex = \"9000\"; document.body.appendChild(iframe);"            
         })
 
         return data;
