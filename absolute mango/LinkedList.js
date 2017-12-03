@@ -3,7 +3,7 @@ function LinkedList(){
 }
 
 //compare before and after images
-function compareImages(before, after){
+function compareImages(before, after, beforeIcon, afterIcon){
     resemble(before).compareTo(after).onComplete(function(data){
         console.log("Callback of resemble's compareTo");
         var comparison = data.getImageDataUrl();
@@ -16,16 +16,21 @@ function compareImages(before, after){
           chrome.tabs.executeScript(null, {
               code: "alert(" + data.misMatchPercentage + " + \"% of the page was mismatched/different.\"); "
           })
+          if (beforeIcon != afterIcon) {
+            chrome.tabs.executeScript(null, {
+              code: "alert(\"The page's favicon has changed\")"
+            })
+          }
         }
 
         chrome.tabs.executeScript(null, {
-            code: "var iframe = document.createElement(\"iframe\"); iframe.src = \"" + comparison + "\"; iframe.allowtransparency = true; iframe.frameborder = \"0\"; " + 
+            code: "var iframe = document.createElement(\"iframe\"); iframe.src = \"" + comparison + "\"; iframe.allowtransparency = true; iframe.frameborder = \"0\"; " +
             " iframe.scrolling=\"no\"; iframe.style.position = \"absolute\"; iframe.style.opacity = \"0.5\"; iframe.style.margin = \"0 auto\"; "
             + " iframe.style.pointerEvents = \"none\"; iframe.setAttribute(\"id\", \"iframe\"); "
             + "var topOffset = (window.pageYOffset || document.scrollTop) - (document.clientTop || 0);"
             + "console.log(topOffset);"
             + "iframe.style.left = \"0px\"; iframe.style.top = topOffset.toString() + \"px\";"
-            + "iframe.position = \"absolute\"; iframe.width = \"100%\";  iframe.height = \"100%\"; iframe.style.zIndex = \"9000\"; document.body.appendChild(iframe);"            
+            + "iframe.position = \"absolute\"; iframe.width = \"100%\";  iframe.height = \"100%\"; iframe.style.zIndex = \"9000\"; document.body.appendChild(iframe);"
         })
 
         return data;
@@ -39,13 +44,14 @@ function compareImages(before, after){
     });
 }
 
-LinkedList.prototype.addWithoutCheck = function(img, url){
+LinkedList.prototype.addWithoutCheck = function(img, url, icon){
     if(typeof img == "undefined"){
         return;
     }
     var node = {
         image: img,
         url: url,
+        icon: icon,
         next: null
     }
 
@@ -58,6 +64,7 @@ LinkedList.prototype.addWithoutCheck = function(img, url){
             if(current.url == url){
                 // compareImages(current.image, img);
                 current.image = img;
+                current.icon = icon;
                 return;
             }
             current = current.next;
@@ -66,13 +73,14 @@ LinkedList.prototype.addWithoutCheck = function(img, url){
         if(current.url == url){
             // compareImages(current.image, img);
             current.image = img;
+            current.icon = icon;
             return;
         }
         current.next = node;
     }
 }
 
-LinkedList.prototype.add = function(img, url){
+LinkedList.prototype.add = function(img, url, icon){
     if(typeof img == "undefined"){
         console.log(url + " chrome API failed to catch an image.")
         return;
@@ -80,6 +88,7 @@ LinkedList.prototype.add = function(img, url){
     var node = {
         image: img,
         url: url,
+        icon: icon,
         next: null
     }
 
@@ -91,16 +100,18 @@ LinkedList.prototype.add = function(img, url){
         while(current.next){
             //If matching url then compare before and after images
             if(current.url == url){
-                compareImages(current.image, img);
+                compareImages(current.image, img, current.icon, icon);
                 current.image = img;
+                current.icon = icon;
                 return;
             }
             current = current.next;
         }
 
         if(current.url == url){
-            compareImages(current.image, img);
+            compareImages(current.image, img, current.icon, icon);
             current.image = img;
+            current.icon = icon;
             return;
         }
         current.next = node;

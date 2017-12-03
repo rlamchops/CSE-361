@@ -14,7 +14,8 @@ function captureImage(){
 
 function captureImageCallback(tabs, img){
   console.log(tabs[0].url);
-  list.add(img, tabs[0].url);
+  list.add(img, tabs[0].url, tabs[0].favIconUrl);
+  console.log(tabs[0].favIconUrl);
 }
 
 function captureImageWithoutCheck(){
