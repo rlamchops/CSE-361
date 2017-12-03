@@ -9,6 +9,7 @@ function compareImages(before, after, beforeIcon, afterIcon){
         var comparison = data.getImageDataUrl();
 
         if(data.misMatchPercentage <= 20){
+            console.log("Mismatch percentage was less than 20%, value = " + data.misMatchPercentage + "%");
             return;
         }
 
